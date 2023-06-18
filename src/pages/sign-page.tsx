@@ -22,28 +22,26 @@ const highlightSelectType=()=>{
     otherElement.style.fontWeight='400';
 }
 
-const checkForAdminOnSignUp=()=>{
+/* const checkForAdminOnSignUp=()=>{
   if(type === 'Sign-up'){
     const currentUserData :any = localStorage.getItem('session-data');
-    if(currentUserData.username !== 'admin0'){
-        alert('only username admin0 can sign up new user')
+    if(currentUserData?.username !== 'admin0'){
+        alert('You need to login as admin0 to sign-up other user')
         return false
     }
  }
-}
+} */
 
 const getCurrentSignedSession=()=>{
     const currentUserData :any = localStorage.getItem('session-data');
     if(currentUserData){
     const data= JSON.parse(currentUserData)
     setCurrentUsername(data.username);
-    console.log('get')
-    console.log(data.username)
     }
 }
 
 const signing= async(input:string)=>{
-    if(checkForAdminOnSignUp() === false){return}
+    /* if(checkForAdminOnSignUp() === false){return} */
     let urlExt;
     input === 'Sign-up' ? urlExt = 'sign-up' : urlExt= 'sign-in';
     axios({
@@ -53,7 +51,7 @@ const signing= async(input:string)=>{
         password: password,
       },
       withCredentials: true,
-      headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
+      /* headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`}, */
       url: `http://localhost:5000/user/${urlExt}`,
     }).then((res) => {
       if(res.data === 'No User Exists'){
@@ -65,7 +63,6 @@ const signing= async(input:string)=>{
         push('/')
       }    
     });
-    // need to only can sign up if the user is admin or user
 }
 
 const signOutFunction=()=>{
@@ -86,15 +83,15 @@ useEffect(()=>{
 },[type])
 
  return(
-    <div className="flex items-start justify-center h-screen ">
+    <div className="flex items-start justify-center h-screen p-5">
 
         <div className=" w-3/12 flex-col p-4 min-w-fit">
             <div className="h-32 text-3xl flex justify-center items-center pb-4 
             font-bold break-words">
                 Department Produksi
             </div>
-            <div className="font-bold text-[color:var(--button)]">
-                {currentUsername ? `Welcome back,${currentUsername}` : 'Sign in to continue'}
+            <div className="pl-2 font-bold text-[color:var(--button)]">
+              Sign in to continue
             </div>
             <div></div>
             <div className="bg-[color:var(--component)] border-2 border-black  p-8 gap-2">
