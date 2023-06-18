@@ -26,7 +26,7 @@ const checkForAdminOnSignUp=()=>{
   if(type === 'Sign-up'){
     const currentUserData :any = localStorage.getItem('session-data');
     if(currentUserData.username !== 'admin0'){
-        alert('only user admin0 can sign up new user')
+        alert('only username admin0 can sign up new user')
         return false
     }
  }
@@ -66,9 +66,18 @@ const signing= async(input:string)=>{
       }    
     });
     // need to only can sign up if the user is admin or user
-    
-    
-   
+}
+
+const signOutFunction=()=>{
+    axios({
+        method : 'POST',
+        url : 'http://localhost:5000/user/sign-out'
+    }).then((res)=>{
+        if(res.statusText === 'OK'){
+        localStorage.clear();
+        setCurrentUsername('')
+        } 
+    })
 }
 
 useEffect(()=>{
@@ -109,10 +118,14 @@ useEffect(()=>{
                  value={password} onChange={(e)=> setPassword((e.target.value))}>    
                 </input>
             </div>
-            <div className="h-20  flex item-center justify-center pt-6">
+            <div className="h-20  flex item-center justify-center pt-6 gap-4">
                 <button className="bg-[color:var(--button)] w-20 h-10 rounded-lg font-bold"
                 onClick={()=>signing(type)}>
                     {type}
+                </button>
+                <button className="bg-[color:var(--button)] w-20 h-10 rounded-lg font-bold"
+                onClick={signOutFunction}>
+                    Sign-out
                 </button>
             </div>
          </div>
