@@ -6,6 +6,11 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --background-dark: #1B1D31;
+  --text: white;
+  --button: #E53854;
+  --text-input: black;
+  --component: #24253C;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,11 +22,7 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  padding: 20px;
+  color: var(--text);
+  background-color: var(--background-dark)
 }
