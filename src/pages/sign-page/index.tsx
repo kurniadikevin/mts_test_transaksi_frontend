@@ -8,6 +8,7 @@ export default function SignPage (){
 const [type,setType]= useState<string>('Sign-in');
 const [username,setUsername]= useState<string>('');
 const [password,setPassword]= useState<string>('');
+const [currentUsername,setCurrentUsername]= useState<string>('');
 const { push } = useRouter();
 
 const highlightSelectType=()=>{
@@ -21,7 +22,28 @@ const highlightSelectType=()=>{
     otherElement.style.fontWeight='400';
 }
 
+const checkForAdminOnSignUp=()=>{
+  if(type === 'Sign-up'){
+    const currentUserData :any = localStorage.getItem('session-data');
+    if(currentUserData.username !== 'admin0'){
+        alert('only user admin0 can sign up new user')
+        return false
+    }
+ }
+}
+
+const getCurrentSignedSession=()=>{
+    const currentUserData :any = localStorage.getItem('session-data');
+    if(currentUserData){
+    const data= JSON.parse(currentUserData)
+    setCurrentUsername(data.username);
+    console.log('get')
+    console.log(data.username)
+    }
+}
+
 const signing= async(input:string)=>{
+    if(checkForAdminOnSignUp() === false){return}
     let urlExt;
     input === 'Sign-up' ? urlExt = 'sign-up' : urlExt= 'sign-in';
     axios({
@@ -43,7 +65,7 @@ const signing= async(input:string)=>{
         push('/')
       }    
     });
-    
+    // need to only can sign up if the user is admin or user
     
     
    
@@ -51,6 +73,7 @@ const signing= async(input:string)=>{
 
 useEffect(()=>{
     highlightSelectType()
+    getCurrentSignedSession()
 },[type])
 
  return(
@@ -61,6 +84,10 @@ useEffect(()=>{
             font-bold break-words">
                 Department Produksi
             </div>
+            <div className="font-bold text-[color:var(--button)]">
+                {currentUsername ? `Welcome back,${currentUsername}` : 'Sign in to continue'}
+            </div>
+            <div></div>
             <div className="bg-[color:var(--component)] border-2 border-black  p-8 gap-2">
             <div className="h-20 flex item-end justify-start gap-4 p-4">
                 <div id="Sign-in-select" className="text-xl  pt-4 cursor-pointer" onClick={()=> setType('Sign-in')}>
