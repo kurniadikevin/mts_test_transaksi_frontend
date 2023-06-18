@@ -8,7 +8,6 @@ export default function SignPage (){
 const [type,setType]= useState<string>('Sign-in');
 const [username,setUsername]= useState<string>('');
 const [password,setPassword]= useState<string>('');
-const [currentUsername,setCurrentUsername]= useState<string>('');
 const { push } = useRouter();
 
 const highlightSelectType=()=>{
@@ -22,26 +21,15 @@ const highlightSelectType=()=>{
     otherElement.style.fontWeight='400';
 }
 
-/* const checkForAdminOnSignUp=()=>{
-  if(type === 'Sign-up'){
-    const currentUserData :any = localStorage.getItem('session-data');
-    if(currentUserData?.username !== 'admin0'){
-        alert('You need to login as admin0 to sign-up other user')
-        return false
-    }
- }
-} */
 
 const getCurrentSignedSession=()=>{
     const currentUserData :any = localStorage.getItem('session-data');
     if(currentUserData){
     const data= JSON.parse(currentUserData)
-    setCurrentUsername(data.username);
     }
 }
 
 const signing= async(input:string)=>{
-    /* if(checkForAdminOnSignUp() === false){return} */
     let urlExt;
     input === 'Sign-up' ? urlExt = 'sign-up' : urlExt= 'sign-in';
     axios({
@@ -50,8 +38,7 @@ const signing= async(input:string)=>{
         username: username,
         password: password,
       },
-      withCredentials: true,
-      /* headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`}, */
+     
       url: `http://localhost:5000/user/${urlExt}`,
     }).then((res) => {
       if(res.data === 'No User Exists'){
@@ -65,21 +52,11 @@ const signing= async(input:string)=>{
     });
 }
 
-const signOutFunction=()=>{
-    axios({
-        method : 'POST',
-        url : 'http://localhost:5000/user/sign-out'
-    }).then((res)=>{
-        if(res.statusText === 'OK'){
-        localStorage.clear();
-        setCurrentUsername('')
-        } 
-    })
-}
+
 
 useEffect(()=>{
     highlightSelectType()
-    getCurrentSignedSession()
+    localStorage.clear();
 },[type])
 
  return(
@@ -120,10 +97,7 @@ useEffect(()=>{
                 onClick={()=>signing(type)}>
                     {type}
                 </button>
-                <button className="bg-[color:var(--button)] w-20 h-10 rounded-lg font-bold"
-                onClick={signOutFunction}>
-                    Sign-out
-                </button>
+               
             </div>
          </div>
         </div>

@@ -6,16 +6,19 @@ import axios from 'axios';
 export default function Home() {
 
   const [data,setData]= useState<any>([]);
+  const [searchInput,setSearchInput]= useState<string>('');
+  const [dataQuery,setDataQuery]= useState<any>([]);
 
   const fetchData=async()=>{
     axios({
       method : 'GET',
       url: 'http://localhost:5000/sales/all',
       headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
-      withCredentials: true
+    
     }).then((res)=>{
       console.log(res.data);
-      setData(res.data)
+      setData(res.data);
+      setDataQuery(res.data);
     }).catch((err)=>{
       console.log(err)
     })
@@ -32,18 +35,41 @@ export default function Home() {
     });
   }
 
+  const queryOnInputChange=()=>{
+    let resultData=data.filter((item :any)=>{
+      if(item.kode){
+      return  ((item.kode).toLowerCase()).includes(searchInput.toLowerCase());
+      }
+    })
+    setDataQuery(resultData)
+  }
+
   useEffect(()=>{
     fetchData()
   },[])
+
+  useEffect(()=>{
+    queryOnInputChange()
+  },[searchInput])
 
   return (
     <div id="page">
       <Dashboard/>
       <div id="main" className="p-20">
         <div className=" items-center justify-center">
-         <div className="font-bold">Daftar transaksi</div>
-         <div>
-         <div className="grid grid-cols-9 border-2 font-bold bg-[color:var(--button)]">
+         <div id='home-head' className="flex justify-between pb-2">
+          <div className="font-bold text-xl">Daftar transaksi</div>
+          <div className="flex gap-4">
+            <div className="font-bold">Cari</div>
+            <input placeholder="Kode" className="px-2 text-[color:var(--text-input)]" 
+           value={searchInput}  onChange={(e)=>{ setSearchInput(e.target.value)}} 
+           >
+           </input>
+         </div>
+         </div>
+
+         <div id="home-body">
+         <div id="table-cont" className="grid grid-cols-9 border-2 font-bold bg-[color:var(--button)]">
                 <div>No</div>
                 <div>Kode</div>
                 <div>Tanggal</div>
@@ -54,10 +80,10 @@ export default function Home() {
                 <div>Ongkir</div>
                 <div>Total bayar</div>
               </div>
-          {data.map((item : any,index : any)=>{
+          {dataQuery.map((item : any,index : any)=>{
             return(
-              <div className="grid grid-cols-9 border-2 bg-[color:var(--component)]">
-                <div>{index}</div>
+              <div id="table-cont" className="grid grid-cols-9 border-2 bg-[color:var(--component)]">
+                <div>{index+1}</div>
                 <div>{item.kode}</div>
                 <div>{showDate(item.tgl)}</div>
                 <div>{item.cust_id.nama}</div>

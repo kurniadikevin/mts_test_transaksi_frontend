@@ -4,7 +4,14 @@ export default function FormInput(){
     return(
         <div id="page">
             <Dashboard/>
-            <div>form input</div>
+            <div>
+                <div>
+                    <div>Transaksi</div>
+                </div>
+                <div>
+                    <div>Customer</div>
+                </div>
+            </div>
         </div>
     )
 }
