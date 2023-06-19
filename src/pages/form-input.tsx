@@ -2,7 +2,7 @@ import Dashboard from "@/components/dashboard";
 import { useEffect, useState } from "react";
 import DatePicker  from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {generateString, formatNumber} from '../functions';
+import {generateString, formatNumber,makeSalesSubmit} from '../functions';
 import axios from "axios";
 
 
@@ -11,25 +11,25 @@ export default function FormInput(){
 
     const [startDate, setStartDate] = useState(new Date());
     const [kodeInput,setKodeInput]= useState<string>('');
-    const [selectedOption, setSelectedOption] = useState('');
-    const [options,setOptions]=useState<any>(['null']);
+    const [custumerKodeOption, setCustomerKodeOption] = useState('');
+    const [customerData,setCustomerData]=useState<any>(['null']);
+    const [customerId,setCustomerId]= useState<any>('');
     const [data,setData]= useState<any>([]);
     const[dataBarang,setDataBarang]=useState([]);
     const [selectedBarang,setSelectedBarang]=useState('');
     const [objBarangSelect, setObjBarangSelect]= useState<any>({harga:0});
     const [discountPerc,setDiscountPerc]= useState<any>(0);
-    const [quantity,setQuantity]= useState<any>(0);
+    const [quantity,setQuantity]= useState<any>(1);
+    const [diskonTotal,setDiskonTotal]= useState<any>(0);
+    const [ongkirTotal,setOngkirTotal]= useState<any>(0);
 
-    type formObject = {
-        kode: string;
-        nama_barang :string;
-        qty: number;
-        harga: string;
-        diskon:number;
-      };
-
-    const handleSelectionChange = (event:any) => {
-        setSelectedOption(event.target.value);
+    const handleSelectionChangeCust = (event:any) => {
+        setCustomerKodeOption(event.target.value);
+        const filtered= customerData.filter((item:any)=>{
+            return item.kode === event.target.value
+        })
+        setCustomerId(filtered[0]._id)
+        console.log(filtered[0]._id)
       };
       
     const handleSelectionBarang = (event:any) => {
@@ -43,6 +43,23 @@ export default function FormInput(){
         })
         setObjBarangSelect(filtered[0])
     }
+    const getSubTotal=()=>{
+        if(data.length >0){
+        const totalArr=data.map((item:any)=>{
+            return item.total
+        })
+        const subTotal= totalArr.reduce((total:number,num:number)=>{
+            return total + num;
+        })
+        return (subTotal);}
+    }
+
+    const getTotalBayar=()=>{
+        const subTotal= getSubTotal();
+        const total= (subTotal + Number(ongkirTotal)) - diskonTotal;
+        return formatNumber(total)
+    }
+
 
     const fetchCustomerCode=async()=>{
         axios({
@@ -51,7 +68,8 @@ export default function FormInput(){
             headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
           
           }).then((res)=>{
-            setOptions(res.data)
+            setCustomerData(res.data)
+            console.log(res.data)
           }).catch((err)=>{
             console.log(err)
           })
@@ -93,24 +111,36 @@ export default function FormInput(){
     const deleteRowData=(index:number)=>{
         setData((prevArray:any) => prevArray.filter((item:any,i:any) => i !== index));
     }
+
+    const converDateToString=(input:any)=>{
+        const date= input.toISOString().split('T')[0];
+        return date
+    }
+
+    const submitForm=()=>{
+        console.log(kodeInput,converDateToString(startDate),customerId,diskonTotal,ongkirTotal)
+        makeSalesSubmit(kodeInput,converDateToString(startDate),customerId,diskonTotal,ongkirTotal)
+    }
     
 
     useEffect(()=>{
         fetchCustomerCode();
-        fetchBarangAll()
-       setKodeInput( generateString(6))
+        fetchBarangAll();
+       setKodeInput( generateString(6));
+       const form:any= document.querySelectorAll('#table-cont-form');
+       form[form.length-1].style.display='none';
     },[])
 
     useEffect(()=>{
-      console.log(data)//
     },[objBarangSelect,data])
 
     return(
         <div id="page">
             <Dashboard/>
-            <div id="main" className="p-10">
-                <div className=" flex justify-start gap-8">
-                 <div className=" flex border-2 flex-col justify-start items-end gap-4 p-4 rounded-l ">
+            <div id="main" className="p-20">
+                <div className="flex justify-between gap-8">
+
+                 <div className=" flex bg-[color:var(--component)] flex-col justify-start items-end gap-4 p-4 rounded-l ">
                     <div className="font-bold text-xl">Transaksi</div>
                     <div className="flex  gap-8">
                         <label>Kode</label>
@@ -122,14 +152,14 @@ export default function FormInput(){
                          className="text-[color:var(--text-input)]"/>
                     </div>
                 </div>
-                <div className="flex border-2 flex-col justify-start items-end gap-4 p-4 ">
+                <div className="flex  bg-[color:var(--component)] flex-col justify-start items-end gap-4 p-4 ">
                     <div className="font-bold text-xl">Customer</div>
                     <div className="flex  gap-8">
                         <label>Kode</label>
-                        <select value={selectedOption} onChange={handleSelectionChange}
+                        <select value={custumerKodeOption} onChange={handleSelectionChangeCust}
                         className="text-[color:var(--text-input)] w-60">
                                 <option value="">Pilih kode customer</option>
-                                {options.map((option:any, index:any) => (
+                                {customerData.map((option:any, index:any) => (
                                 <option key={index} value={option.kode}>
                                     {option.kode}
                                 </option>
@@ -145,27 +175,32 @@ export default function FormInput(){
                         <input  className="text-[color:var(--text-input)]"></input>
                     </div>
                  </div>
-                 <div className=" flex border-2 bg-[color:var(--button)] flex-col justify-start items-end gap-4 p-4 ">
-                    <div className="font-bold text-lg flex gap-4 justify-between items-center">
+                 <div className=" flex  bg-[color:var(--button)] flex-col justify-start items-start gap-4 p-4 ">
+                    <div className="font-bold text-lg flex gap-4 justify-start items-center">
                         <div>Subtotal</div>
-                        <div>129.000</div>
+                        <div>{formatNumber(getSubTotal())}</div>
                     </div>
-                    <div className="font-bold text-lg flex gap-8 justify-between items-center">
+                    <div className="font-bold  flex gap-4 justify-between items-center">
                         <div>Diskon</div>
-                        <input   className="text-[color:var(--text-input)]"></input>
+                        <input className="text-[color:var(--text-input)] w-40"
+                          value={diskonTotal} onChange={(e)=> setDiskonTotal((e.target.value))}>
+                        </input>
                     </div>
-                    <div  className="font-bold text-lg flex gap-8 justify-between items-center">
+                    <div  className="font-bold  flex gap-4 justify-between items-center">
                         <div>Ongkir</div>
-                        <input   className="text-[color:var(--text-input)]"></input>
+                        <input   className="text-[color:var(--text-input)] w-40"
+                         value={ongkirTotal} onChange={(e)=> setOngkirTotal((e.target.value))}
+                         >
+                         </input>
                     </div>
-                    <div className="font-bold text-xl flex gap-4">
+                    <div className="font-bold text-lg flex gap-4">
                         <div>Total Bayar</div>
-                        <div>234.000</div>
+                        <div>{getTotalBayar()}</div>
                     </div>
                 </div>
                 </div>
                 <div className=" mt-6">
-                    <div id="table-cont-form" className="border-2 p-2 font-bold bg-[color:var(--button)] gap-4">
+                    <div id="table-cont-form" className="border-2 border-black p-2 py-3 font-bold bg-[color:var(--button)] gap-4">
                         <button className="cursor-pointer bg-[color:var(--text)] text-black rounded-xl"
                           onClick={toggleNewForm}>
                             Tambah
@@ -183,7 +218,7 @@ export default function FormInput(){
                     
                     <div>{data.map((item:any, index:number)=>{
                         return(
-                            <div id="table-cont-form" className="border-2 p-2 py-4 font-bold bg-[color:var(--component)] gap-4">
+                            <div id="table-cont-form" className="border-2 border-black p-2 py-3 font-bold bg-[color:var(--component)] gap-4">
                             <button className="cursor-pointer bg-[color:var(--text)] text-black rounded-xl"
                               onClick={()=> deleteRowData(index)}>
                                 Hapus
@@ -211,6 +246,7 @@ export default function FormInput(){
                         <div id="kode-form">{objBarangSelect.kode}</div>
                         <select value={selectedBarang} onChange={handleSelectionBarang}
                         className="text-[color:var(--text-input)] w-25">
+                              
                                 {dataBarang.map((option:any, index:any) => (
                                 <option key={index} value={option.name} /* onSelect={setIndexBarang(index)} */>
                                     {option.nama}
@@ -234,11 +270,18 @@ export default function FormInput(){
                             {formatNumber(
                             objBarangSelect.harga - (discountPerc * objBarangSelect.harga / 100))}
                         </div>
-                        <div>{formatNumber(
-                            quantity* objBarangSelect.harga * (100-discountPerc)/ 100
-                        )}</div>
+                        <div>
+                            {formatNumber( quantity* objBarangSelect.harga * (100-discountPerc)/ 100)}
+                        </div>
                     </div>
-                    
+                    <div  className=" pt-8 font-bold flex justify-center items-center gap-12">
+                        <button className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
+                        onClick={submitForm}>
+                        Simpan</button>
+                        <button className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
+                         onClick={()=>setData([])}>Batal
+                        </button>
+                    </div>
                     <div>
                         
                     </div>
