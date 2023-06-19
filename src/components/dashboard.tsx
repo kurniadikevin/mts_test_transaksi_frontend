@@ -22,7 +22,8 @@ export default function Dashboard(){
                 <span className="material-icons text-[color:var(--button)]">note_add</span>     
                 <div id='dash-select'>Form Input</div>
             </div>
-            <div className="flex justify-start items-start font-bold text-lg cursor-pointer gap-4">
+            <div className="flex justify-start items-start font-bold text-lg cursor-pointer gap-4"
+             onClick={()=> push('/new-data')}>
                 <span className="material-icons text-[color:var(--button)]" >add</span>     
                 <div id='dash-select'>Item / Customer</div>
             </div>

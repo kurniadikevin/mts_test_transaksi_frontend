@@ -25,13 +25,36 @@ export default function Home() {
     })
   }
 
+  const deleteTransaction=(sales_id:string)=>{
+    axios({
+      method : 'DELETE',
+      url: `http://localhost:5000/sales/delete-by-id/${sales_id}`,
+      headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
+    
+    }).then((res)=>{
+      console.log(res.data);
+      alert('delete');
+      filterDataForUpdateState(sales_id)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  const filterDataForUpdateState=(_id:string)=>{
+    const filtered= data.filter((item:any)=>{
+      return item._id !== _id
+    })
+    setData(filtered)
+    console.log(filtered)
+  }
 
 
 
   const queryOnInputChange=()=>{
     let resultData=data.filter((item :any)=>{
-      if(item.kode){
-      return  ((item.kode).toLowerCase()).includes(searchInput.toLowerCase());
+      if(item.cust_id.nama){
+      return (  ((item.cust_id.nama).toLowerCase()).includes(searchInput.toLowerCase())
+      ||  ((item.kode).toLowerCase()).includes(searchInput.toLowerCase()) )
       }
     })
     setDataQuery(resultData)
@@ -43,7 +66,7 @@ export default function Home() {
 
   useEffect(()=>{
     queryOnInputChange()
-  },[searchInput])
+  },[searchInput,data])
 
   return (
     <div id="page">
@@ -54,7 +77,7 @@ export default function Home() {
           <div className="font-bold text-xl">Daftar transaksi</div>
           <div className="flex gap-4">
             <div className="font-bold">Cari</div>
-            <input placeholder="Kode" className="px-2 text-[color:var(--text-input)]" 
+            <input placeholder="Nama Customer / Kode" className="px-2 text-[color:var(--text-input)]" 
            value={searchInput}  onChange={(e)=>{ setSearchInput(e.target.value)}} 
            >
            </input>
@@ -62,7 +85,7 @@ export default function Home() {
          </div>
 
          <div id="home-body" >
-          <div id="table-cont" className="grid grid-cols-9 p-2 border-2 border-black font-bold bg-[color:var(--button)]">
+          <div id="table-cont" className="grid grid-cols-10 p-2 border-2 border-black font-bold bg-[color:var(--button)]">
                 <div>No</div>
                 <div>Kode</div>
                 <div>Tanggal</div>
@@ -72,10 +95,11 @@ export default function Home() {
                 <div>Diskon</div>
                 <div>Ongkir</div>
                 <div>Total bayar</div>
+                <div></div>
               </div>
           {dataQuery.map((item : any,index : any)=>{
             return(
-              <div id="table-cont" className="grid grid-cols-9 p-2 border-2 border-black bg-[color:var(--component)]">
+              <div id="table-cont" className="grid grid-cols-10 p-2 border-2 border-black bg-[color:var(--component)]">
                 <div>{index+1}</div>
                 <div>{item.kode}</div>
                 <div>{showDate(item.tgl)}</div>
@@ -85,6 +109,9 @@ export default function Home() {
                 <div>{formatNumber(item.diskon)}</div>
                 <div>{formatNumber(item.ongkir)}</div>
                 <div>{formatNumber(item.total_bayar)}</div>
+                <div className="flex justify-center cursor-pointer" onClick={()=> deleteTransaction(item._id)}>
+                <span className="material-icons text-[color:var(--button)]">delete</span>
+                </div>
               </div>
             )
           }) 

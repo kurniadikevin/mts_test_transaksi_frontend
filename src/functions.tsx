@@ -17,6 +17,8 @@ export const formatNumber=(input:any)=>{
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
+  } else{
+    return 0;
   }
   }
 
@@ -27,7 +29,8 @@ export const showDate=(input: any)=>{
   return day.reverse().join('-')
 }
 
-export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,diskon:number,ongkir:number)=>{
+export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,
+  diskon:number,ongkir:number, subTotal:number,jumlahBarang:number, totalBayar:number)=>{
   axios({
     method: "POST",
     data: {
@@ -35,7 +38,10 @@ export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,diskon:numb
       tgl: tanggal,
       cust_id : customerId,
       diskon : diskon,
-      ongkir : ongkir
+      ongkir : ongkir,
+      subtotal : subTotal,
+      jumlah_barang : jumlahBarang,
+      total_bayar : totalBayar
   },
     headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
     url: 'http://localhost:5000/sales/new',

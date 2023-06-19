@@ -46,6 +46,7 @@ export default function FormInput(){
         })
         setObjBarangSelect(filtered[0])
     }
+
     const getSubTotal=()=>{
         if(data.length >0){
         const totalArr=data.map((item:any)=>{
@@ -54,13 +55,26 @@ export default function FormInput(){
         const subTotal= totalArr.reduce((total:number,num:number)=>{
             return total + num;
         })
-        return (subTotal);}
+        return (subTotal);
+        }
+    }
+
+    const getJumlahBarang=()=>{
+        if(data.length >0){
+        const totalArr=data.map((item:any)=>{
+            return item.qty
+        })
+        const total= totalArr.reduce((total:number,num:number)=>{
+            return total + num;
+        })
+        return (total);}
+        else{ return 0}
     }
 
     const getTotalBayar=()=>{
         const subTotal= getSubTotal();
         const total= (subTotal + Number(ongkirTotal)) - diskonTotal;
-        return formatNumber(total)
+        return (total)
     }
 
 
@@ -72,7 +86,6 @@ export default function FormInput(){
           
           }).then((res)=>{
             setCustomerData(res.data)
-            console.log(res.data)
           }).catch((err)=>{
             console.log(err)
           })
@@ -121,8 +134,16 @@ export default function FormInput(){
     }
 
     const submitForm=()=>{
-        console.log(kodeInput,converDateToString(startDate),customerId,diskonTotal,ongkirTotal)
-        makeSalesSubmit(kodeInput,converDateToString(startDate),customerId,diskonTotal,ongkirTotal)
+        if(kodeInput && converDateToString(startDate)&& customerId ){
+            console.log(kodeInput,converDateToString(startDate),customerId,
+            diskonTotal,ongkirTotal,getSubTotal(),getTotalBayar())
+            makeSalesSubmit(kodeInput,converDateToString(startDate),customerId,diskonTotal,
+            ongkirTotal,getSubTotal(),getJumlahBarang(),getTotalBayar());
+            setData([])
+            toggleNewForm()
+        } else{
+            alert('form data not complete')
+        }
     }
     
 
@@ -180,8 +201,10 @@ export default function FormInput(){
                  </div>
                  <div className=" flex  bg-[color:var(--button)] flex-col justify-start items-start gap-4 p-4 ">
                     <div className="font-bold text-lg flex gap-4 justify-start items-center">
-                        <div>Subtotal</div>
+                        <div>Subtotal:</div>
                         <div>{formatNumber(getSubTotal())}</div>
+                        <div>Jumlah:</div>
+                        <div>{getJumlahBarang()}</div>
                     </div>
                     <div className="font-bold  flex gap-4 justify-between items-center">
                         <div>Diskon</div>
@@ -198,13 +221,13 @@ export default function FormInput(){
                     </div>
                     <div className="font-bold text-lg flex gap-4">
                         <div>Total Bayar</div>
-                        <div>{getTotalBayar()}</div>
+                        <div>{formatNumber(getTotalBayar())}</div>
                     </div>
                 </div>
                 </div>
                 <div className=" mt-6">
                     <div id="table-cont-form" className="border-2 border-black p-2 py-3 font-bold bg-[color:var(--button)] gap-4">
-                        <button className="cursor-pointer bg-[color:var(--text)] text-black rounded-xl"
+                        <button className="cursor-pointer bg-[color:var(--text)] text-[color:var(--button)] rounded-xl"
                           onClick={toggleNewForm}>
                             Tambah
                         </button>
@@ -222,7 +245,7 @@ export default function FormInput(){
                     <div>{data.map((item:any, index:number)=>{
                         return(
                             <div id="table-cont-form" className="border-2 border-black p-2 py-3 font-bold bg-[color:var(--component)] gap-4">
-                            <button className="cursor-pointer bg-[color:var(--text)] text-black rounded-xl"
+                            <button className="cursor-pointer bg-[color:var(--text)] text-[color:var(--button)] rounded-xl"
                               onClick={()=> deleteRowData(index)}>
                                 Hapus
                             </button>
@@ -241,9 +264,10 @@ export default function FormInput(){
                     </div>
 
                     <div id="table-cont-form" className="mt-8 p-4 rounded-xl  text-[color:var(--text-input)]  bg-[color:var(--text)] gap-4">
-                        <button className="cursor-pointer font-bold text-xl bg-[color:var(--button)] text-white rounded-xl"
+                        <button className="cursor-pointer font-bold text-xl  text-white 
+                        rounded-xl flex justify-center "
                             onClick={addFormDataToData}>
-                            +
+                            <span className="material-icons text-[color:var(--button)] text-xl">add_box</span>
                         </button>
                         <div></div>
                         <div id="kode-form">{objBarangSelect.kode}</div>
@@ -282,7 +306,8 @@ export default function FormInput(){
                         onClick={submitForm}>
                         Simpan</button>
                         <button className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
-                         onClick={()=>setData([])}>Batal
+                         onClick={()=>{setData([]);toggleNewForm() }}
+                         >Batal
                         </button>
                     </div>
                     <div>

@@ -21,14 +21,6 @@ const highlightSelectType=()=>{
     otherElement.style.fontWeight='400';
 }
 
-
-const getCurrentSignedSession=()=>{
-    const currentUserData :any = localStorage.getItem('session-data');
-    if(currentUserData){
-    const data= JSON.parse(currentUserData)
-    }
-}
-
 const signing= async(input:string)=>{
     let urlExt;
     input === 'Sign-up' ? urlExt = 'sign-up' : urlExt= 'sign-in';
@@ -72,7 +64,7 @@ useEffect(()=>{
             </div>
             <div></div>
             <div className="bg-[color:var(--component)] border-2 border-black  p-8 gap-2">
-            <div className="h-20 flex item-end justify-start gap-4 p-4">
+             <div className="h-20 flex item-end justify-start gap-4 p-4">
                 <div id="Sign-in-select" className="text-xl  pt-4 cursor-pointer" onClick={()=> setType('Sign-in')}>
                     Sign-in
                 </div>
