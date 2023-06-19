@@ -14,6 +14,7 @@ export default function FormInput(){
     const [custumerKodeOption, setCustomerKodeOption] = useState('');
     const [customerData,setCustomerData]=useState<any>(['null']);
     const [customerId,setCustomerId]= useState<any>('');
+    const [customerTelp,setCustomerTelp]=useState<any>('')
     const [data,setData]= useState<any>([]);
     const[dataBarang,setDataBarang]=useState([]);
     const [selectedBarang,setSelectedBarang]=useState('');
@@ -28,8 +29,10 @@ export default function FormInput(){
         const filtered= customerData.filter((item:any)=>{
             return item.kode === event.target.value
         })
-        setCustomerId(filtered[0]._id)
-        console.log(filtered[0]._id)
+        if(filtered[0]?._id && filtered[0]?.telp){
+            setCustomerId(filtered[0]._id)
+            setCustomerTelp(filtered[0].telp)
+        }
       };
       
     const handleSelectionBarang = (event:any) => {
@@ -155,24 +158,24 @@ export default function FormInput(){
                 <div className="flex  bg-[color:var(--component)] flex-col justify-start items-end gap-4 p-4 ">
                     <div className="font-bold text-xl">Customer</div>
                     <div className="flex  gap-8">
-                        <label>Kode</label>
+                        <label>Nama</label>
                         <select value={custumerKodeOption} onChange={handleSelectionChangeCust}
                         className="text-[color:var(--text-input)] w-60">
-                                <option value="">Pilih kode customer</option>
+                                <option value="">Pilih nama customer</option>
                                 {customerData.map((option:any, index:any) => (
                                 <option key={index} value={option.kode}>
-                                    {option.kode}
+                                    {option.nama}
                                 </option>
                                 ))}
                             </select>
                     </div>
                     <div  className="flex  gap-8">
-                        <label>Nama</label>
-                        <input  className="text-[color:var(--text-input)]"></input>
+                        <label>Kode</label>
+                        <input value={custumerKodeOption} className="text-[color:var(--text-input)]"></input>
                     </div>
                     <div  className="flex  gap-8">
                         <label>No.Telp</label>
-                        <input  className="text-[color:var(--text-input)]"></input>
+                        <input value={customerTelp} className="text-[color:var(--text-input)]"></input>
                     </div>
                  </div>
                  <div className=" flex  bg-[color:var(--button)] flex-col justify-start items-start gap-4 p-4 ">
