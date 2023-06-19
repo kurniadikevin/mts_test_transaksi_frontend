@@ -1,6 +1,7 @@
 import Dashboard from "@/components/dashboard";
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import { formatNumber } from "@/functions";
 
 
 export default function Home() {
@@ -32,12 +33,6 @@ export default function Home() {
     return day.reverse().join('-')
   }
 
-  const formatNumber=(input:any)=>{
-    return input.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  }
 
   const queryOnInputChange=()=>{
     let resultData=data.filter((item :any)=>{
@@ -72,8 +67,8 @@ export default function Home() {
          </div>
          </div>
 
-         <div id="home-body">
-         <div id="table-cont" className="grid grid-cols-9 border-2 font-bold bg-[color:var(--button)]">
+         <div id="home-body" >
+          <div id="table-cont" className="grid grid-cols-9 p-2 border-2 font-bold bg-[color:var(--button)]">
                 <div>No</div>
                 <div>Kode</div>
                 <div>Tanggal</div>
@@ -86,7 +81,7 @@ export default function Home() {
               </div>
           {dataQuery.map((item : any,index : any)=>{
             return(
-              <div id="table-cont" className="grid grid-cols-9 border-2 bg-[color:var(--component)]">
+              <div id="table-cont" className="grid grid-cols-9 p-2 border-2 bg-[color:var(--component)]">
                 <div>{index+1}</div>
                 <div>{item.kode}</div>
                 <div>{showDate(item.tgl)}</div>

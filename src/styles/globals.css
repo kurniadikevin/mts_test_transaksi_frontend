@@ -11,6 +11,7 @@
   --button: #E53854;
   --text-input: black;
   --component: #24253C;
+  --gray:rgb(232, 234, 236);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -49,6 +50,11 @@ body {
 #home-body{
   min-width: 800px;
   overflow-x: auto;
+}
+
+#table-cont-form{
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 3fr 1fr 2fr 1fr 2fr 2fr 2fr;
 }
 /* ------------media query --------------------- */
 
