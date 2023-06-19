@@ -109,8 +109,8 @@ export default function FormInput(){
         <div id="page">
             <Dashboard/>
             <div id="main" className="p-10">
-                <div className=" flex justify-center gap-8">
-                 <div className=" flex border-2 flex-col justify-start items-end gap-4 p-4 ">
+                <div className=" flex justify-start gap-8">
+                 <div className=" flex border-2 flex-col justify-start items-end gap-4 p-4 rounded-l ">
                     <div className="font-bold text-xl">Transaksi</div>
                     <div className="flex  gap-8">
                         <label>Kode</label>
@@ -128,7 +128,7 @@ export default function FormInput(){
                         <label>Kode</label>
                         <select value={selectedOption} onChange={handleSelectionChange}
                         className="text-[color:var(--text-input)] w-60">
-                                <option value="">Select an kode</option>
+                                <option value="">Pilih kode customer</option>
                                 {options.map((option:any, index:any) => (
                                 <option key={index} value={option.kode}>
                                     {option.kode}
@@ -145,6 +145,24 @@ export default function FormInput(){
                         <input  className="text-[color:var(--text-input)]"></input>
                     </div>
                  </div>
+                 <div className=" flex border-2 bg-[color:var(--button)] flex-col justify-start items-end gap-4 p-4 ">
+                    <div className="font-bold text-lg flex gap-4 justify-between items-center">
+                        <div>Subtotal</div>
+                        <div>129.000</div>
+                    </div>
+                    <div className="font-bold text-lg flex gap-8 justify-between items-center">
+                        <div>Diskon</div>
+                        <input   className="text-[color:var(--text-input)]"></input>
+                    </div>
+                    <div  className="font-bold text-lg flex gap-8 justify-between items-center">
+                        <div>Ongkir</div>
+                        <input   className="text-[color:var(--text-input)]"></input>
+                    </div>
+                    <div className="font-bold text-xl flex gap-4">
+                        <div>Total Bayar</div>
+                        <div>234.000</div>
+                    </div>
+                </div>
                 </div>
                 <div className=" mt-6">
                     <div id="table-cont-form" className="border-2 p-2 font-bold bg-[color:var(--button)] gap-4">
@@ -220,6 +238,7 @@ export default function FormInput(){
                             quantity* objBarangSelect.harga * (100-discountPerc)/ 100
                         )}</div>
                     </div>
+                    
                     <div>
                         
                     </div>
