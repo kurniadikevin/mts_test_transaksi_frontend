@@ -23,6 +23,7 @@ export default function FormInput(){
     const [quantity,setQuantity]= useState<any>(1);
     const [diskonTotal,setDiskonTotal]= useState<any>(0);
     const [ongkirTotal,setOngkirTotal]= useState<any>(0);
+    const [dataDetailArr,setDataDetailArr]= useState<any>([]);
 
     const handleSelectionChangeCust = (event:any) => {
         setCustomerKodeOption(event.target.value);
@@ -119,7 +120,8 @@ export default function FormInput(){
             diskon_pct : discountPerc,
             diskon_nilai : discountPerc * objBarangSelect.harga / 100,
             harga_diskon :  objBarangSelect.harga - (discountPerc * objBarangSelect.harga / 100),
-            total :  quantity* objBarangSelect.harga * (100-discountPerc)/ 100
+            total :  quantity* objBarangSelect.harga * (100-discountPerc)/ 100,
+            barang_id : objBarangSelect._id
         }
         setData((data:any)=> [...data,objForm])
     }
@@ -138,7 +140,7 @@ export default function FormInput(){
             console.log(kodeInput,converDateToString(startDate),customerId,
             diskonTotal,ongkirTotal,getSubTotal(),getTotalBayar())
             makeSalesSubmit(kodeInput,converDateToString(startDate),customerId,diskonTotal,
-            ongkirTotal,getSubTotal(),getJumlahBarang(),getTotalBayar());
+            ongkirTotal,getSubTotal(),getJumlahBarang(),getTotalBayar(),data);
             setData([])
             toggleNewForm()
         } else{
@@ -156,6 +158,7 @@ export default function FormInput(){
     },[])
 
     useEffect(()=>{
+
     },[objBarangSelect,data])
 
     return(
@@ -275,7 +278,7 @@ export default function FormInput(){
                         className="text-[color:var(--text-input)] w-25">
                               
                                 {dataBarang.map((option:any, index:any) => (
-                                <option key={index} value={option.name} /* onSelect={setIndexBarang(index)} */>
+                                <option key={index} value={option.name}>
                                     {option.nama}
                                 </option>
                                 ))}

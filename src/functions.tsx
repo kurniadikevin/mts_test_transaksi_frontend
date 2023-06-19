@@ -30,7 +30,7 @@ export const showDate=(input: any)=>{
 }
 
 export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,
-  diskon:number,ongkir:number, subTotal:number,jumlahBarang:number, totalBayar:number)=>{
+  diskon:number,ongkir:number, subTotal:number,jumlahBarang:number, totalBayar:number,data:any)=>{
   axios({
     method: "POST",
     data: {
@@ -49,8 +49,38 @@ export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,
     if(res.data === 'No User Exists'){
       console.log(res.data)
     } else{
+      const salesId=res.data.data._id
       console.log(res.data)
+      console.log(salesId)
       alert('new sales created')
+      makeSalesDetailSubmitLoop(assignSalesIdToDataDetail(data,salesId),salesId)
     }    
   });
+}
+
+
+const assignSalesIdToDataDetail=(data:any,id:string)=>{
+  for (let i = 0; i < data.length; i++) {
+      data[i].sales_id = id;
+    }
+    return data
+}
+
+
+export const makeSalesDetailSubmitLoop=async (dataArray:any,sales_id:string)=>{
+
+  
+  for (const data of dataArray) {
+    try {
+      await axios.post('http://localhost:5000/sales-detail/new', data,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      console.log('Post request successful');
+    } catch (error) {
+      console.log('Post request failed',error);
+    }
+  }
+
 }
