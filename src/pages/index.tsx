@@ -24,8 +24,12 @@ export default function Home() {
     })
   }
 
-  const showDate=(input: string)=>{
-    return input.split('T')[0]
+  const showDate=(input: any)=>{
+
+    const date= input.split('T')[0];
+    const day= date.split('-');
+     day[day.length-1] = Number(day[day.length -1]) + 1
+    return day.reverse().join('-')
   }
 
   const formatNumber=(input:any)=>{
