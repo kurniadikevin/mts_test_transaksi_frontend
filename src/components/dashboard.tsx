@@ -12,7 +12,7 @@ export default function Dashboard(){
         <div id="dashboard-component" className=" pl-8 pr-4">
             <div id='dash-title'  className="flex justify-center 
             items-start font-bold  pl-8  pt-8 text-2xl">
-                Department Transaksi
+                Department Produksi
             </div>
             <div className="flex justify-start items-start font-bold text-lg cursor-pointer gap-4"
             onClick={()=> push('/')}>
