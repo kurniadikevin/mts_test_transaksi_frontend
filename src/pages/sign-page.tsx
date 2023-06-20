@@ -35,7 +35,7 @@ export default function SignPage (){
           password: password,
         },
       
-        url: `http://localhost:5000/user/${urlExt}`,
+        url: `https://wild-rose-pigeon-belt.cyclic.app/user/${urlExt}`,
       }).then((res) => {
         if(res.data === 'No User Exists'){
           callModal(res.data);
