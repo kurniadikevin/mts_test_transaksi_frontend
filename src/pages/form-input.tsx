@@ -62,7 +62,7 @@ export default function FormInput(){
     const getJumlahBarang=()=>{
         if(data.length >0){
         const totalArr=data.map((item:any)=>{
-            return item.qty
+            return Number(item.qty)
         })
         const total= totalArr.reduce((total:number,num:number)=>{
             return total + num;

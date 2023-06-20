@@ -52,7 +52,7 @@ export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,
       const salesId=res.data.data._id
       console.log(res.data)
       console.log(salesId)
-      callModal('Success: New sales created!')
+      callModal('New sales created!')
       makeSalesDetailSubmitLoop(assignSalesIdToDataDetail(data,salesId),salesId)
     }    
   });
