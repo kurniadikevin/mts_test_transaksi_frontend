@@ -74,21 +74,32 @@ body {
 }
 /* ------------media query --------------------- */
 
-@media only screen and (max-width: 1200px) {
-  
-}
-
 
 @media only screen and (max-width: 1200px) {
+
+  body{
+    overflow-x: auto;
+
+  }
+
   #page {
     grid-template-columns: 1fr;
     grid-template-rows: 15fr 1fr;
+   
   }
   #dashboard-component{
+    width: 40%;
+    height: 75px;
     order: 1;
     grid-template-rows: 1fr;
     grid-template-columns: repeat(4, 1fr);
     padding-left:0px ;
+    border: 1px solid black;
+    border-radius: 24px;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   #dashboard-component>div{
     
