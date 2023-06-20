@@ -56,8 +56,22 @@ body {
   color:var(--button)
 }
 
+#sign-btn:hover,#form-btn:hover{
+  background-color: var(--text);
+  color:var(--button);
+}
+
 #sign-out-btn>div:hover{
   background-color: var(--text);
+}
+
+#add-box:hover,#hapus-btn:hover{
+  background-color: var(--button);
+  color:var(--text);
+}
+
+#tambah-btn:hover{
+  background-color: var(--component);
 }
 
 #modal{

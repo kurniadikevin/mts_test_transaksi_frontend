@@ -36,7 +36,7 @@ export default function Dashboard(){
             onClick={()=> push('/sign-page')}>
             <span className="material-icons text-[color:var(--button)]">logout</span>
                 <div id='dash-select' className="bg-[color:var(--button)] w-30 h-15 p-2 
-                rounded-2xl font-bold flex justify-start items-center">
+                rounded-2xl  flex justify-start items-center">
                     Sign-out</div>
             </div>
             <Modal />

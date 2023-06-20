@@ -233,7 +233,7 @@ export default function FormInput(){
                 </div>
                 <div className=" mt-6">
                     <div id="table-cont-form" className="border-2 border-black p-2 py-3 font-bold bg-[color:var(--button)] gap-4">
-                        <button className="cursor-pointer bg-[color:var(--text)] text-[color:var(--button)] rounded-xl"
+                        <button id="tambah-btn" className="cursor-pointer bg-[color:var(--text)] text-[color:var(--button)] rounded-xl"
                           onClick={toggleNewForm}>
                             Tambah
                         </button>
@@ -251,7 +251,7 @@ export default function FormInput(){
                     <div>{data.map((item:any, index:number)=>{
                         return(
                             <div id="table-cont-form" className="border-2 border-black p-2 py-3 font-bold bg-[color:var(--component)] gap-4">
-                            <button className="cursor-pointer bg-[color:var(--text)] text-[color:var(--button)] rounded-xl"
+                            <button id='hapus-btn' className="cursor-pointer bg-[color:var(--text)] text-[color:var(--button)] rounded-xl"
                               onClick={()=> deleteRowData(index)}>
                                 Hapus
                             </button>
@@ -273,7 +273,7 @@ export default function FormInput(){
                         <button className="cursor-pointer font-bold text-xl  text-white  bg-[color:var(--component)]
                         rounded-xl flex justify-center "
                             onClick={addFormDataToData}>
-                            <span className="material-icons text-[color:var(--button)]
+                            <span id='add-box' className="material-icons text-[color:var(--button)]
                              text-xl">add_box</span>
                         </button>
                         <div></div>
@@ -308,10 +308,10 @@ export default function FormInput(){
                         </div>
                     </div>
                     <div  className=" pt-8 font-bold flex justify-center items-center gap-8">
-                        <button className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
+                        <button id="form-btn" className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
                         onClick={submitForm}>
                         Simpan</button>
-                        <button className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
+                        <button id='form-btn' className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
                          onClick={()=>{setData([]);toggleNewForm() }}
                          >Batal
                         </button>

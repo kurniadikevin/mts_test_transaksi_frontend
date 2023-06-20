@@ -98,7 +98,7 @@ export default function SignPage (){
                 </input>
             </div>
             <div className="h-20  flex item-center justify-center pt-6 gap-4">
-                <button className="bg-[color:var(--button)] w-20 h-10 rounded-lg font-bold"
+                <button id='sign-btn' className="bg-[color:var(--button)] w-20 h-10 rounded-lg font-bold"
                 onClick={()=>signing(type)}>
                     {type}
                 </button>
