@@ -31,7 +31,7 @@ const signing= async(input:string)=>{
         password: password,
       },
      
-      url: `http://localhost:5000/user/${urlExt}`,
+      url: `https://wild-rose-pigeon-belt.cyclic.app/user/${urlExt}`,
     }).then((res) => {
       if(res.data === 'No User Exists'){
         console.log(res.data)

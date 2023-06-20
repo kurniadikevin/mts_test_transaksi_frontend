@@ -4,11 +4,11 @@ import DatePicker  from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {generateString, formatNumber,makeSalesSubmit, callModal} from '../functions';
 import axios from "axios";
-
-
+import { useRouter } from 'next/navigation';
 
 export default function FormInput(){
 
+    const { push } = useRouter();
     const [startDate, setStartDate] = useState(new Date());
     const [kodeInput,setKodeInput]= useState<string>('');
     const [custumerKodeOption, setCustomerKodeOption] = useState('');
@@ -81,7 +81,7 @@ export default function FormInput(){
     const fetchCustomerCode=async()=>{
         axios({
             method : 'GET',
-            url: 'http://localhost:5000/customer/all',
+            url: 'https://wild-rose-pigeon-belt.cyclic.app/customer/all',
             headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
           
           }).then((res)=>{
@@ -94,7 +94,7 @@ export default function FormInput(){
     const fetchBarangAll=async()=>{
         axios({
             method : 'GET',
-            url: 'http://localhost:5000/barang/all',
+            url: 'https://wild-rose-pigeon-belt.cyclic.app/barang/all',
             headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
           
           }).then((res)=>{
@@ -154,6 +154,10 @@ export default function FormInput(){
        setKodeInput( generateString(6));
        const form:any= document.querySelectorAll('#table-cont-form');
        form[form.length-1].style.display='none';
+       const session= localStorage.getItem("session-data")
+       if(!session){
+         push('/sign-page')
+       }
     },[])
 
     useEffect(()=>{

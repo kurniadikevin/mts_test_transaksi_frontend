@@ -17,7 +17,7 @@ export default function Home() {
   const fetchData=async()=>{
     axios({
       method : 'GET',
-      url: 'http://localhost:5000/sales/all',
+      url: 'https://wild-rose-pigeon-belt.cyclic.app/sales/all',
       headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
     
     }).then((res)=>{
@@ -31,7 +31,7 @@ export default function Home() {
   const deleteTransaction=(sales_id:string)=>{
     axios({
       method : 'DELETE',
-      url: `http://localhost:5000/sales/delete-by-id/${sales_id}`,
+      url: `https://wild-rose-pigeon-belt.cyclic.app/sales/delete-by-id/${sales_id}`,
       headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
     
     }).then((res)=>{
@@ -65,6 +65,10 @@ export default function Home() {
 
   useEffect(()=>{
     fetchData()
+    const session= localStorage.getItem("session-data")
+    if(!session){
+      push('/sign-page')
+    }
   },[])
 
   useEffect(()=>{

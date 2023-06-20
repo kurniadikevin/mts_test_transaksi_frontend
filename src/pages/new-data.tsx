@@ -2,9 +2,11 @@ import Dashboard from "@/components/dashboard";
 import { callModal } from "@/functions";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 
 export default function NewData(){
 
+    const { push } = useRouter();
     const [type,setType]= useState<string>('customer');
     const [nama,setNama]=useState<string>('')
     const [kode,setKode]=useState<string>('')
@@ -32,7 +34,7 @@ export default function NewData(){
                 [property] : hargaTelp
           },
           headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
-          url: `http://localhost:5000/${input}/add-new`,
+          url: `https://wild-rose-pigeon-belt.cyclic.app/${input}/add-new`,
         }).then((res) => {
           if(res.data === 'No User Exists'){
             console.log(res.data)
@@ -46,8 +48,14 @@ export default function NewData(){
 
     useEffect(()=>{
         highlightSelectType()
-      
     },[type])
+
+    useEffect(()=>{
+        const session= localStorage.getItem("session-data")
+        if(!session){
+          push('/sign-page')
+        }
+    },[])
 
 
     return(

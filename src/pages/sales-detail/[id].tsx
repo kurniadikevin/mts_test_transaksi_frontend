@@ -17,7 +17,7 @@ export default function SalesDetailPage(){
         axios({
             method: "GET",
             headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
-            url: `http://localhost:5000/sales-detail/by-sales-id/${id}`,
+            url: `https://wild-rose-pigeon-belt.cyclic.app/sales-detail/by-sales-id/${id}`,
         }).then((res)=>{
             console.log(res.data)
             setData(res.data)

@@ -44,7 +44,7 @@ export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,
       total_bayar : totalBayar
   },
     headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
-    url: 'http://localhost:5000/sales/new',
+    url: 'https://wild-rose-pigeon-belt.cyclic.app/sales/new',
   }).then((res) => {
     if(res.data === 'No User Exists'){
       console.log(res.data)
@@ -70,7 +70,7 @@ const assignSalesIdToDataDetail=(data:any,id:string)=>{
 export const makeSalesDetailSubmitLoop=async (dataArray:any,sales_id:string)=>{
   for (const data of dataArray) {
     try {
-      await axios.post('http://localhost:5000/sales-detail/new', data,{
+      await axios.post('https://wild-rose-pigeon-belt.cyclic.app/sales-detail/new', data,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }});
