@@ -11,9 +11,11 @@ export default function Dashboard(){
 
     return(
         <div id="dashboard-component" className=" pl-8 pr-4">
-            <div id='dash-title'  className="flex justify-center 
-            items-start font-bold  pl-8  pt-8 text-2xl">
-                Department Produksi
+            <div id='dash-title'  className="flex justify-center cursor-pointer
+            items-start font-bold  pl-8  pt-8 text-2xl" >
+                <div className='cursor-pointer' id='title-name' onClick={()=> push('/')}>
+                    Department Produksi
+                </div>
             </div>
             <div className="flex justify-start items-start font-bold text-lg cursor-pointer gap-4"
             onClick={()=> push('/')}>

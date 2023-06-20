@@ -48,6 +48,10 @@ body {
   border-right: 1px solid var(--text-input);
 }
 
+#title-name:hover{
+  color:var(--button)
+}
+
 #dash-select:hover{
   color:var(--button)
 }
@@ -72,8 +76,8 @@ body {
   display: grid;
   grid-template-columns: 2fr 1fr 2fr 3fr 1fr 2fr 1fr 2fr 2fr 2fr;
 }
-/* ------------media query --------------------- */
 
+/* ------------media query --------------------- */
 
 @media only screen and (max-width: 1200px) {
 
