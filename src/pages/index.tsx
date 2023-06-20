@@ -114,10 +114,10 @@ export default function Home() {
                 <div>{showDate(item.tgl)}</div>
                 <div>{item.cust_id.nama}</div>
                 <div>{item?.jumlah_barang ? item.jumlah_barang : 0}</div>
-                <div>{formatNumber(item.subtotal)}</div>
-                <div>{formatNumber(item.diskon)}</div>
-                <div>{formatNumber(item.ongkir)}</div>
-                <div>{formatNumber(item.total_bayar)}</div>
+                <div>{(item.subtotal).toLocaleString()}</div>
+                <div>{(item.diskon).toLocaleString()}</div>
+                <div>{(item.ongkir).toLocaleString()}</div>
+                <div>{(item.total_bayar).toLocaleString()}</div>
                 <div className="flex justify-center gap-6" >
                   <span className="material-icons text-[color:var(--button)] cursor-pointer"
                    onClick={()=> push(`/sales-detail/${item._id}`)}>

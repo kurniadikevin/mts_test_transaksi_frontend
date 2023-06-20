@@ -122,7 +122,7 @@ export default function FormInput(){
             total :  quantity* objBarangSelect.harga * (100-discountPerc)/ 100,
             barang_id : objBarangSelect._id
         }
-        setData((data:any)=> [...data,objForm])
+         setData((data:any)=> [...data,objForm])
     }
 
     const deleteRowData=(index:number)=>{
@@ -138,7 +138,7 @@ export default function FormInput(){
         if(kodeInput && converDateToString(startDate)&& customerId ){
             toggleLoader('inline');
             makeSalesSubmit(kodeInput,converDateToString(startDate),customerId,diskonTotal,
-                ongkirTotal,getSubTotal(),getJumlahBarang(),getTotalBayar(),data);
+               ongkirTotal,getSubTotal(),getJumlahBarang(),getTotalBayar(),data);
             setData([])
             toggleNewForm()
         } else{

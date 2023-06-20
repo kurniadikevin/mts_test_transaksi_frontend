@@ -67,6 +67,7 @@ const assignSalesIdToDataDetail=(data:any,id:string)=>{
 
 
 export const makeSalesDetailSubmitLoop=async (dataArray:any,sales_id:string)=>{
+  console.log(dataArray)
   for (const data of dataArray) {
     try {
       await axios.post('https://wild-rose-pigeon-belt.cyclic.app/sales-detail/new', data,{

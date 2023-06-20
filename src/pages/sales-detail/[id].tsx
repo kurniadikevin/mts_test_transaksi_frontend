@@ -19,6 +19,7 @@ export default function SalesDetailPage(){
         }).then((res)=>{
             toggleLoader('none')
             setData(res.data)
+            console.log(res.data)
         }).catch((err)=>{
             console.log(err)
         })
@@ -43,7 +44,7 @@ export default function SalesDetailPage(){
                         <div>Kode Sales</div>
                         <div>Tanggal</div>
                         <div>Nama Barang</div>
-                        <div>Quantity</div>
+                        <div>Qty</div>
                         <div>Diskon (%)</div>
                         <div>Nilai Diskon</div>
                         <div>Total</div>
@@ -57,8 +58,8 @@ export default function SalesDetailPage(){
                 <div>{item.barang_id.nama}</div>
                 <div>{item.qty}</div>
                 <div>{item.diskon_pct}</div>
-                <div>{item.diskon_nilai}</div>
-                <div>{item.total}</div>
+                <div>{(item.diskon_nilai).toLocaleString()}</div>
+                <div>{(item.total).toLocaleString()}</div>
               </div>
             )
           }) 
