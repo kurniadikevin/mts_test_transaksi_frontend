@@ -48,6 +48,21 @@ body {
   border-right: 1px solid var(--text-input);
 }
 
+#dash-select:hover{
+  color:var(--button)
+}
+
+#sign-out-btn>div:hover{
+  background-color: var(--text);
+}
+
+#modal{
+  display: none;
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+}
+
 #home-body{
   min-width: 800px;
   overflow-x: auto;

@@ -52,7 +52,7 @@ export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,
       const salesId=res.data.data._id
       console.log(res.data)
       console.log(salesId)
-      alert('new sales created')
+      callModal('Success: New sales created!')
       makeSalesDetailSubmitLoop(assignSalesIdToDataDetail(data,salesId),salesId)
     }    
   });
@@ -68,19 +68,25 @@ const assignSalesIdToDataDetail=(data:any,id:string)=>{
 
 
 export const makeSalesDetailSubmitLoop=async (dataArray:any,sales_id:string)=>{
-
-  
   for (const data of dataArray) {
     try {
       await axios.post('http://localhost:5000/sales-detail/new', data,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      });
+        }});
       console.log('Post request successful');
     } catch (error) {
       console.log('Post request failed',error);
     }
   }
 
+}
+
+export const callModal=(text:string)=>{
+  const modal:any=document.querySelector('#modal');
+  modal.style.display='block';
+  modal.textContent=text;
+  setTimeout(()=>{
+    modal.style.display='none'
+  },2000)
 }

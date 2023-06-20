@@ -1,5 +1,7 @@
 import 'material-icons/iconfont/material-icons.css';
 import { useRouter } from 'next/navigation';
+import Modal from './modal';
+
 
 
 export default function Dashboard(){
@@ -27,13 +29,14 @@ export default function Dashboard(){
                 <span className="material-icons text-[color:var(--button)]" >add</span>     
                 <div id='dash-select'>Item / Customer</div>
             </div>
-            <div className="flex justify-start  items-center font-bold text-lg cursor-pointer gap-4"
+            <div id='sign-out-btn' className="flex justify-start  items-center font-bold text-lg cursor-pointer gap-4"
             onClick={()=> push('/sign-page')}>
             <span className="material-icons text-[color:var(--button)]">logout</span>
                 <div id='dash-select' className="bg-[color:var(--button)] w-30 h-15 p-2 
                 rounded-2xl font-bold flex justify-start items-center">
                     Sign-out</div>
             </div>
+            <Modal />
         </div>
     )
 }

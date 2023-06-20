@@ -2,7 +2,7 @@ import Dashboard from "@/components/dashboard";
 import { useEffect, useState } from "react";
 import DatePicker  from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {generateString, formatNumber,makeSalesSubmit} from '../functions';
+import {generateString, formatNumber,makeSalesSubmit, callModal} from '../functions';
 import axios from "axios";
 
 
@@ -23,7 +23,6 @@ export default function FormInput(){
     const [quantity,setQuantity]= useState<any>(1);
     const [diskonTotal,setDiskonTotal]= useState<any>(0);
     const [ongkirTotal,setOngkirTotal]= useState<any>(0);
-    const [dataDetailArr,setDataDetailArr]= useState<any>([]);
 
     const handleSelectionChangeCust = (event:any) => {
         setCustomerKodeOption(event.target.value);
@@ -144,7 +143,7 @@ export default function FormInput(){
             setData([])
             toggleNewForm()
         } else{
-            alert('form data not complete')
+            callModal('Error: please input customer data!')
         }
     }
     
@@ -211,13 +210,13 @@ export default function FormInput(){
                     </div>
                     <div className="font-bold  flex gap-4 justify-between items-center">
                         <div>Diskon</div>
-                        <input className="text-[color:var(--text-input)] w-40"
+                        <input className="px-2 text-[color:var(--text-input)] w-40"
                           value={diskonTotal} onChange={(e)=> setDiskonTotal((e.target.value))}>
                         </input>
                     </div>
                     <div  className="font-bold  flex gap-4 justify-between items-center">
                         <div>Ongkir</div>
-                        <input   className="text-[color:var(--text-input)] w-40"
+                        <input   className=" px-2 text-[color:var(--text-input)] w-40"
                          value={ongkirTotal} onChange={(e)=> setOngkirTotal((e.target.value))}
                          >
                          </input>
@@ -276,7 +275,6 @@ export default function FormInput(){
                         <div id="kode-form">{objBarangSelect.kode}</div>
                         <select value={selectedBarang} onChange={handleSelectionBarang}
                         className="text-[color:var(--text-input)] w-25">
-                              
                                 {dataBarang.map((option:any, index:any) => (
                                 <option key={index} value={option.name}>
                                     {option.nama}
@@ -284,7 +282,7 @@ export default function FormInput(){
                                 ))}
                             </select>
                         <div>
-                            <input className="w-10 bg-[color:var(--gray)]" placeholder="qty" 
+                            <input className="w-10 bg-[color:var(--gray)]" placeholder="qty" type="number"
                             value={quantity}  onChange={(e)=> setQuantity((e.target.value))}>
                             </input>
                         </div>

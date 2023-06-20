@@ -1,4 +1,5 @@
 import Dashboard from "@/components/dashboard";
+import { callModal } from "@/functions";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -37,8 +38,8 @@ export default function NewData(){
             console.log(res.data)
           } else{
             console.log(res.data)
-            alert('succeed')
-          }    
+            callModal(`Succeed: new ${type} added!`)
+        }    
         });
     }
 

@@ -1,7 +1,9 @@
 import Dashboard from "@/components/dashboard";
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import { formatNumber,showDate } from "@/functions";
+import { callModal, formatNumber,showDate } from "@/functions";
+import { useRouter } from 'next/navigation';
+
 
 
 export default function Home() {
@@ -9,6 +11,8 @@ export default function Home() {
   const [data,setData]= useState<any>([]);
   const [searchInput,setSearchInput]= useState<string>('');
   const [dataQuery,setDataQuery]= useState<any>([]);
+  const { push } = useRouter();
+
 
   const fetchData=async()=>{
     axios({
@@ -17,7 +21,6 @@ export default function Home() {
       headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
     
     }).then((res)=>{
-      console.log(res.data);
       setData(res.data);
       setDataQuery(res.data);
     }).catch((err)=>{
@@ -33,7 +36,7 @@ export default function Home() {
     
     }).then((res)=>{
       console.log(res.data);
-      alert('delete');
+      callModal('Success: transaction deleted')
       filterDataForUpdateState(sales_id)
     }).catch((err)=>{
       console.log(err)
@@ -109,8 +112,15 @@ export default function Home() {
                 <div>{formatNumber(item.diskon)}</div>
                 <div>{formatNumber(item.ongkir)}</div>
                 <div>{formatNumber(item.total_bayar)}</div>
-                <div className="flex justify-center cursor-pointer" onClick={()=> deleteTransaction(item._id)}>
-                <span className="material-icons text-[color:var(--button)]">delete</span>
+                <div className="flex justify-center gap-6" >
+                  <span className="material-icons text-[color:var(--button)] cursor-pointer"
+                   onClick={()=> push(`/sales-detail/${item._id}`)}>
+                    open_in_new
+                 </span>
+                  <span className="material-icons text-[color:var(--button)] cursor-pointer"
+                  onClick={()=> deleteTransaction(item._id)}>
+                    delete
+                  </span>
                 </div>
               </div>
             )
