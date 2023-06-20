@@ -1,55 +1,68 @@
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Loader from "@/components/loader/loader";
+import { toggleLoader, callModal } from "@/functions";
+import Modal from "@/components/modal";
 
 
 export default function SignPage (){
 
-const [type,setType]= useState<string>('Sign-in');
-const [username,setUsername]= useState<string>('');
-const [password,setPassword]= useState<string>('');
-const { push } = useRouter();
+  const [type,setType]= useState<string>('Sign-in');
+  const [username,setUsername]= useState<string>('');
+  const [password,setPassword]= useState<string>('');
+  const { push } = useRouter();
 
-const highlightSelectType=()=>{
-    let other;
-    type === 'Sign-up' ? other = 'Sign-in' : other = 'Sign-up'
-    const element : any = document.querySelector(`#${type}-select`);
-    element.style.color='var(--button)';
-    element.style.fontWeight='700';
-    const otherElement : any = document.querySelector(`#${other}-select`);
-    otherElement.style.color='var(--text)';
-    otherElement.style.fontWeight='400';
-}
+  const highlightSelectType=()=>{
+      let other;
+      type === 'Sign-up' ? other = 'Sign-in' : other = 'Sign-up'
+      const element : any = document.querySelector(`#${type}-select`);
+      element.style.color='var(--button)';
+      element.style.fontWeight='700';
+      const otherElement : any = document.querySelector(`#${other}-select`);
+      otherElement.style.color='var(--text)';
+      otherElement.style.fontWeight='400';
+  }
 
-const signing= async(input:string)=>{
-    let urlExt;
-    input === 'Sign-up' ? urlExt = 'sign-up' : urlExt= 'sign-in';
-    axios({
-      method: "POST",
-      data: {
-        username: username,
-        password: password,
-      },
-     
-      url: `https://wild-rose-pigeon-belt.cyclic.app/user/${urlExt}`,
-    }).then((res) => {
-      if(res.data === 'No User Exists'){
-        console.log(res.data)
-      } else{
-        console.log(res.data)
-        localStorage.setItem("token", (res.data.token));
-        localStorage.setItem("session-data", JSON.stringify(res.data.data));
-        push('/')
-      }    
-    });
-}
+  const signing= async(input:string)=>{
+      let urlExt;
+      toggleLoader('inline')
+      input === 'Sign-up' ? urlExt = 'sign-up' : urlExt= 'sign-in';
+      axios({
+        method: "POST",
+        data: {
+          username: username,
+          password: password,
+        },
+      
+        url: `http://localhost:5000/user/${urlExt}`,
+      }).then((res) => {
+        if(res.data === 'No User Exists'){
+          callModal(res.data);
+          toggleLoader('none');
+        } else{
+          localStorage.setItem("token", (res.data.token));
+          localStorage.setItem("session-data", JSON.stringify(res.data.data));
+          push('/')
+        }    
+      });
+  }
 
+    const settingLoader=()=>{
+      const loader:any=document.querySelector('#loader');
+      loader.style.top='85%';
+    }
 
+  useEffect(()=>{
+      highlightSelectType();
+    
+  },[type])
 
-useEffect(()=>{
-    highlightSelectType()
+  useEffect(()=>{
     localStorage.clear();
-},[type])
+    settingLoader();
+    toggleLoader('none');
+  },[])
 
  return(
     <div className="flex items-start justify-center h-screen p-5">
@@ -62,7 +75,7 @@ useEffect(()=>{
             <div className="pl-2 font-bold text-[color:var(--button)]">
               Sign in to continue
             </div>
-            <div></div>
+            
             <div className="bg-[color:var(--component)] border-2 border-black  p-8 gap-2">
              <div className="h-20 flex item-end justify-start gap-4 p-4">
                 <div id="Sign-in-select" className="text-xl  pt-4 cursor-pointer" onClick={()=> setType('Sign-in')}>
@@ -92,6 +105,8 @@ useEffect(()=>{
                
             </div>
          </div>
+         <Loader/>
+         <Modal/>
         </div>
 
     </div>

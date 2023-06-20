@@ -1,5 +1,5 @@
 import Dashboard from "@/components/dashboard";
-import { callModal } from "@/functions";
+import { callModal,toggleLoader } from "@/functions";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
@@ -24,6 +24,7 @@ export default function NewData(){
     }
 
     const handleSubmit=(input:string)=>{
+        toggleLoader('inline')
         let property;
         input ==='barang' ? property='harga' : property= 'telp'
         axios({
@@ -40,6 +41,7 @@ export default function NewData(){
             console.log(res.data)
           } else{
             console.log(res.data)
+            toggleLoader('none')
             callModal(`Succeed: new ${type} added!`)
         }    
         });
@@ -51,6 +53,7 @@ export default function NewData(){
     },[type])
 
     useEffect(()=>{
+        toggleLoader('none')
         const session= localStorage.getItem("session-data")
         if(!session){
           push('/sign-page')

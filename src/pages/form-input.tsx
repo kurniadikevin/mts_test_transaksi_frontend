@@ -2,7 +2,7 @@ import Dashboard from "@/components/dashboard";
 import { useEffect, useState } from "react";
 import DatePicker  from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {generateString, formatNumber,makeSalesSubmit, callModal} from '../functions';
+import {generateString, formatNumber,makeSalesSubmit, callModal, toggleLoader} from '../functions';
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 
@@ -136,10 +136,9 @@ export default function FormInput(){
 
     const submitForm=()=>{
         if(kodeInput && converDateToString(startDate)&& customerId ){
-            console.log(kodeInput,converDateToString(startDate),customerId,
-            diskonTotal,ongkirTotal,getSubTotal(),getTotalBayar())
+            toggleLoader('inline');
             makeSalesSubmit(kodeInput,converDateToString(startDate),customerId,diskonTotal,
-            ongkirTotal,getSubTotal(),getJumlahBarang(),getTotalBayar(),data);
+                ongkirTotal,getSubTotal(),getJumlahBarang(),getTotalBayar(),data);
             setData([])
             toggleNewForm()
         } else{
@@ -154,6 +153,7 @@ export default function FormInput(){
        setKodeInput( generateString(6));
        const form:any= document.querySelectorAll('#table-cont-form');
        form[form.length-1].style.display='none';
+       toggleLoader('none')
        const session= localStorage.getItem("session-data")
        if(!session){
          push('/sign-page')
@@ -167,7 +167,7 @@ export default function FormInput(){
     return(
         <div id="page">
             <Dashboard/>
-            <div id="main" className="p-20">
+            <div id="main" className="p-16">
                 <div className="flex justify-between gap-8">
 
                  <div className=" flex bg-[color:var(--component)] flex-col justify-start items-end gap-4 p-4 rounded-l ">
@@ -270,10 +270,11 @@ export default function FormInput(){
                     </div>
 
                     <div id="table-cont-form" className="mt-8 p-4 rounded-xl  text-[color:var(--text-input)]  bg-[color:var(--text)] gap-4">
-                        <button className="cursor-pointer font-bold text-xl  text-white 
+                        <button className="cursor-pointer font-bold text-xl  text-white  bg-[color:var(--component)]
                         rounded-xl flex justify-center "
                             onClick={addFormDataToData}>
-                            <span className="material-icons text-[color:var(--button)] text-xl">add_box</span>
+                            <span className="material-icons text-[color:var(--button)]
+                             text-xl">add_box</span>
                         </button>
                         <div></div>
                         <div id="kode-form">{objBarangSelect.kode}</div>
@@ -306,7 +307,7 @@ export default function FormInput(){
                             {formatNumber( quantity* objBarangSelect.harga * (100-discountPerc)/ 100)}
                         </div>
                     </div>
-                    <div  className=" pt-8 font-bold flex justify-center items-center gap-12">
+                    <div  className=" pt-8 font-bold flex justify-center items-center gap-8">
                         <button className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
                         onClick={submitForm}>
                         Simpan</button>

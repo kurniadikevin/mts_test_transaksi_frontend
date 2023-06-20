@@ -50,10 +50,9 @@ export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,
       console.log(res.data)
     } else{
       const salesId=res.data.data._id
-      console.log(res.data)
-      console.log(salesId)
-      callModal('New sales created!')
       makeSalesDetailSubmitLoop(assignSalesIdToDataDetail(data,salesId),salesId)
+      callModal('New sales created!');
+      toggleLoader('none')
     }    
   });
 }
@@ -89,4 +88,9 @@ export const callModal=(text:string)=>{
   setTimeout(()=>{
     modal.style.display='none'
   },2000)
+}
+
+export const toggleLoader=(display:string)=>{
+  const loader:any= document.querySelector('#loader');
+  loader.style.display=display;
 }

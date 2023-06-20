@@ -1,6 +1,7 @@
 import 'material-icons/iconfont/material-icons.css';
 import { useRouter } from 'next/navigation';
 import Modal from './modal';
+import Loader from './loader/loader';
 
 
 
@@ -37,6 +38,7 @@ export default function Dashboard(){
                     Sign-out</div>
             </div>
             <Modal />
+            <Loader/>
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import Dashboard from "@/components/dashboard";
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import { callModal, formatNumber,showDate } from "@/functions";
+import { callModal, formatNumber,showDate ,toggleLoader} from "@/functions";
 import { useRouter } from 'next/navigation';
 
 
@@ -23,6 +23,8 @@ export default function Home() {
     }).then((res)=>{
       setData(res.data);
       setDataQuery(res.data);
+      toggleLoader('none')
+
     }).catch((err)=>{
       console.log(err)
     })

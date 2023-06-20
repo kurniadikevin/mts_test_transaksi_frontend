@@ -1,9 +1,8 @@
 import Dashboard from "@/components/dashboard"
-import { showDate } from "@/functions";
+import { showDate, toggleLoader } from "@/functions";
 import axios from "axios";
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
-
 
 
 export default function SalesDetailPage(){
@@ -12,14 +11,13 @@ export default function SalesDetailPage(){
     const id = router.query.id;
     const [data,setData]= useState<any>([]);
 
-
     const fetchSalesDetailData=()=>{
         axios({
             method: "GET",
             headers : {  Authorization : `Bearer ${localStorage.getItem("token")}`},
             url: `https://wild-rose-pigeon-belt.cyclic.app/sales-detail/by-sales-id/${id}`,
         }).then((res)=>{
-            console.log(res.data)
+            toggleLoader('none')
             setData(res.data)
         }).catch((err)=>{
             console.log(err)
@@ -29,6 +27,7 @@ export default function SalesDetailPage(){
     console.log(router.query.id)
     useEffect(()=>{
         fetchSalesDetailData()
+      
     },[])
 
     return(
