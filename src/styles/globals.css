@@ -65,9 +65,13 @@ body {
   background-color: var(--text);
 }
 
-#add-box:hover,#hapus-btn:hover{
+ #action-btn:hover,#hapus-btn:hover{
   background-color: var(--button);
   color:var(--text);
+}
+
+#index-btn:hover{
+  color: var(--text);
 }
 
 #tambah-btn:hover{

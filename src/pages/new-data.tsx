@@ -42,7 +42,7 @@ export default function NewData(){
           } else{
             console.log(res.data)
             toggleLoader('none')
-            callModal(`Succeed: new ${type} added!`)
+            callModal(`Succeed: New ${type} added!`)
         }    
         });
     }

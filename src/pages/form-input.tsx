@@ -2,7 +2,8 @@ import Dashboard from "@/components/dashboard";
 import { useEffect, useState } from "react";
 import DatePicker  from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {generateString, formatNumber,makeSalesSubmit, callModal, toggleLoader} from '../functions';
+import {generateString, formatNumber,makeSalesSubmit, convertDateToString,
+    callModal, toggleLoader,updateDataFormList, highlightUpdateSelected, clearUpdateHighlight} from '../functions';
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 
@@ -11,18 +12,24 @@ export default function FormInput(){
     const { push } = useRouter();
     const [startDate, setStartDate] = useState(new Date());
     const [kodeInput,setKodeInput]= useState<string>('');
+
     const [custumerKodeOption, setCustomerKodeOption] = useState('');
     const [customerData,setCustomerData]=useState<any>(['null']);
     const [customerId,setCustomerId]= useState<any>('');
-    const [customerTelp,setCustomerTelp]=useState<any>('')
+    const [customerTelp,setCustomerTelp]=useState<any>('');
+
     const [data,setData]= useState<any>([]);
-    const[dataBarang,setDataBarang]=useState([]);
+    const [dataBarang,setDataBarang]=useState([]);
+
     const [selectedBarang,setSelectedBarang]=useState('');
     const [objBarangSelect, setObjBarangSelect]= useState<any>({harga:0});
     const [discountPerc,setDiscountPerc]= useState<any>(0);
     const [quantity,setQuantity]= useState<any>(1);
     const [diskonTotal,setDiskonTotal]= useState<any>(0);
     const [ongkirTotal,setOngkirTotal]= useState<any>(0);
+
+    const [mode,setMode]= useState<any>('Tambah');
+    const [indexToUpdate,setIndexToUpdate]= useState<any>();
 
     const handleSelectionChangeCust = (event:any) => {
         setCustomerKodeOption(event.target.value);
@@ -104,10 +111,15 @@ export default function FormInput(){
           })
     }
 
-    const toggleNewForm=()=>{
+    const toggleInputForm=()=>{
         const form:any= document.querySelectorAll('#table-cont-form');
         const formNew:any= form[form.length-1];
-        formNew.style.display==='none' ? formNew.style.display='grid' :formNew.style.display='none'
+        if( formNew.style.display==='none'){
+            formNew.style.display='grid' 
+        } else{
+            formNew.style.display='none';
+             clearUpdateHighlight();
+        }
     }
 
     const addFormDataToData=()=>{  
@@ -129,23 +141,45 @@ export default function FormInput(){
         setData((prevArray:any) => prevArray.filter((item:any,i:any) => i !== index));
     }
 
-    const converDateToString=(input:any)=>{
-        const date= input.toISOString().split('T')[0];
-        return date
-    }
 
     const submitForm=()=>{
-        if(kodeInput && converDateToString(startDate)&& customerId ){
+        if(kodeInput && convertDateToString(startDate)&& customerId && data.length > 0){
             toggleLoader('inline');
-            makeSalesSubmit(kodeInput,converDateToString(startDate),customerId,diskonTotal,
+            makeSalesSubmit(kodeInput,convertDateToString(startDate),customerId,diskonTotal,
                ongkirTotal,getSubTotal(),getJumlahBarang(),getTotalBayar(),data);
             setData([])
-            toggleNewForm()
+            toggleInputForm()
         } else{
-            callModal('Error: please input customer data!')
-        }
+            callModal('Error: Please input customer data and transaction data!')
+        }}
+
+    const focusUpdateRow=(index:number)=>{
+        highlightUpdateSelected(index);
+        setMode('Update');
+        toggleInputForm();
+        setIndexToUpdate(index)
     }
     
+    const addOrUpdateToData=(index:any)=>{
+       if(mode === 'Tambah'){
+        addFormDataToData(); 
+       } else if(mode === 'Update'){
+        updateDataFormList(index,setData,
+            {
+                kode : objBarangSelect.kode,
+                nama_barang : selectedBarang,
+                qty : quantity,
+                harga_bandrol : objBarangSelect.harga,
+                diskon_pct : discountPerc,
+                diskon_nilai : discountPerc * objBarangSelect.harga / 100,
+                harga_diskon :  objBarangSelect.harga - (discountPerc * objBarangSelect.harga / 100),
+                total :  quantity* objBarangSelect.harga * (100-discountPerc)/ 100,
+                barang_id : objBarangSelect._id
+            },
+            )
+       }
+       toggleInputForm()
+    }
 
     useEffect(()=>{
         fetchCustomerCode();
@@ -161,7 +195,7 @@ export default function FormInput(){
     },[])
 
     useEffect(()=>{
-
+        console.log(data)
     },[objBarangSelect,data])
 
     return(
@@ -233,9 +267,11 @@ export default function FormInput(){
                 </div>
                 <div className=" mt-6">
                     <div id="table-cont-form" className="border-2 border-black p-2 py-3 font-bold bg-[color:var(--button)] gap-4">
-                        <button id="tambah-btn" className="cursor-pointer bg-[color:var(--text)] text-[color:var(--button)] rounded-xl"
-                          onClick={toggleNewForm}>
-                            Tambah
+                        <button id="tambah-btn" className="cursor-pointer bg-[color:var(--text)] text-[color:var(--button)] rounded-xl
+                         flex items-center justify-center"
+                          onClick={()=>{setMode('Tambah'); toggleInputForm();}}>
+                           <span id='add-box' className="material-icons text-[color:var(--button)]
+                             text-xl">add_box</span>
                         </button>
                         <div>No</div>
                         <div>Kode Barang</div>
@@ -251,10 +287,18 @@ export default function FormInput(){
                     <div>{data.map((item:any, index:number)=>{
                         return(
                             <div id="table-cont-form" className="border-2 border-black p-2 py-3 font-bold bg-[color:var(--component)] gap-4">
-                            <button id='hapus-btn' className="cursor-pointer bg-[color:var(--text)] text-[color:var(--button)] rounded-xl"
-                              onClick={()=> deleteRowData(index)}>
-                                Hapus
-                            </button>
+                               <div className="flex items-center justify-center gap-4">
+                                <button id='hapus-btn' className="cursor-pointer bg-[color:var(--text)]
+                                    text-[color:var(--button)] rounded-l flex justify-center items-center"
+                                    onClick={()=> deleteRowData(index)}>
+                                    <span className="material-icons">delete</span>
+                                </button>
+                                <button id='hapus-btn' className="cursor-pointer bg-[color:var(--text)]
+                                    text-[color:var(--button)] rounded-l flex justify-center items-center"
+                                    onClick={()=>focusUpdateRow(index)}>
+                                    <span className="material-icons">edit</span>
+                                </button>
+                              </div>
                             <div>{index+1}</div>
                             <div>{item.kode}</div>
                             <div>{item.nama_barang}</div>
@@ -270,11 +314,10 @@ export default function FormInput(){
                     </div>
 
                     <div id="table-cont-form" className="mt-8 p-4 rounded-xl  text-[color:var(--text-input)]  bg-[color:var(--text)] gap-4">
-                        <button className="cursor-pointer font-bold text-xl  text-white  bg-[color:var(--component)]
-                        rounded-xl flex justify-center "
-                            onClick={addFormDataToData}>
-                            <span id='add-box' className="material-icons text-[color:var(--button)]
-                             text-xl">add_box</span>
+                        <button className="cursor-pointer font-bold text-l  text-white  bg-[color:var(--component)]
+                        rounded-xl flex justify-center" id="action-btn"
+                            onClick={()=>addOrUpdateToData(indexToUpdate)}>
+                             {mode}
                         </button>
                         <div></div>
                         <div id="kode-form">{objBarangSelect.kode}</div>
@@ -309,10 +352,10 @@ export default function FormInput(){
                     </div>
                     <div  className=" pt-8 font-bold flex justify-center items-center gap-8">
                         <button id="form-btn" className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
-                        onClick={submitForm}>
+                        onClick={()=>{submitForm(); toggleInputForm();}}>
                         Simpan</button>
                         <button id='form-btn' className=" bg-[color:var(--button)] py-2 px-3 rounded-xl"
-                         onClick={()=>{setData([]);toggleNewForm() }}
+                         onClick={()=>{setData([]);toggleInputForm() }}
                          >Batal
                         </button>
                     </div>

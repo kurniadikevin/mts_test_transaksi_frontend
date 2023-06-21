@@ -29,6 +29,11 @@ export const showDate=(input: any)=>{
   return day.reverse().join('-')
 }
 
+export const convertDateToString=(input:any)=>{
+    const date= input.toISOString().split('T')[0];
+    return date
+}
+
 export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,
   diskon:number,ongkir:number, subTotal:number,jumlahBarang:number, totalBayar:number,data:any)=>{
   axios({
@@ -51,7 +56,7 @@ export const makeSalesSubmit=(kode:string,tanggal:any,customerId:any,
     } else{
       const salesId=res.data.data._id
       makeSalesDetailSubmitLoop(assignSalesIdToDataDetail(data,salesId),salesId)
-      callModal('New sales created!');
+      callModal('New sales created !');
       toggleLoader('none')
     }    
   });
@@ -94,4 +99,35 @@ export const callModal=(text:string)=>{
 export const toggleLoader=(display:string)=>{
   const loader:any= document.querySelector('#loader');
   loader.style.display=display;
+}
+
+export const updateDataFormList=(indexInput:number,setState:any ,updateData:any)=>{
+  setState((prevArray:any) => {
+    return prevArray.map((obj:any, index:number) => {
+      if (index === indexInput) {
+        // Return a new object with the updated data
+        return updateData ;
+      }
+      return obj; //Return original there is no match
+    });
+  });
+}
+
+
+export const highlightUpdateSelected=(index:number)=>{
+  const rows :any=document.querySelectorAll('#table-cont-form');
+   for(let i=0; i<rows.length ;i++){
+    if(i === index+1){
+      rows[index+1].style.border='1px solid var(--text)'; 
+    } else{
+      rows[i].style.border='1px solid black'; 
+    }
+  }
+}
+
+export const clearUpdateHighlight=()=>{
+  const rows :any=document.querySelectorAll('#table-cont-form');
+  for(let i=0; i<rows.length ;i++){
+    rows[i].style.border='1px solid black'; 
+  }
 }

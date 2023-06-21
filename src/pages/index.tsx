@@ -38,7 +38,7 @@ export default function Home() {
     
     }).then((res)=>{
       console.log(res.data);
-      callModal('Success: transaction deleted')
+      callModal('Succeed: Transaction deleted!')
       filterDataForUpdateState(sales_id)
     }).catch((err)=>{
       console.log(err)
@@ -117,13 +117,15 @@ export default function Home() {
                 <div>{(item.subtotal).toLocaleString()}</div>
                 <div>{(item.diskon).toLocaleString()}</div>
                 <div>{(item.ongkir).toLocaleString()}</div>
-                <div>{(item.total_bayar).toLocaleString()}</div>
+                <div>{item?.total_bayar ? (item.total_bayar).toLocaleString() : 0}</div>
                 <div className="flex justify-center gap-6" >
-                  <span className="material-icons text-[color:var(--button)] cursor-pointer"
+                  <span id="index-btn"
+                   className="material-icons text-[color:var(--button)] cursor-pointer"
                    onClick={()=> push(`/sales-detail/${item._id}`)}>
                     open_in_new
                  </span>
-                  <span className="material-icons text-[color:var(--button)] cursor-pointer"
+                  <span id="index-btn" 
+                  className="material-icons text-[color:var(--button)] cursor-pointer"
                   onClick={()=> deleteTransaction(item._id)}>
                     delete
                   </span>
