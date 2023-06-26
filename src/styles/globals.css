@@ -27,7 +27,6 @@ body {
   background-color: var(--background-dark);
   width: 100vw; 
   height: 100vh; 
- /*  position: fixed;  */
   top: 0;
   left: 0;
   overflow-x: hidden;
@@ -43,10 +42,12 @@ body {
 
 #dashboard-component{
   display: grid;
-  grid-template-rows: 4fr 1fr 1fr 1fr 4fr ;
+  grid-template-rows: 4fr 1fr 1fr 1fr 2fr 2fr ;
   background-color: var(--component);
   border-right: 1px solid var(--text-input);
 }
+
+
 
 #title-name:hover{
   color:var(--button)
