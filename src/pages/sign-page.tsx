@@ -41,12 +41,27 @@ export default function SignPage (){
           callModal(res.data);
           toggleLoader('none');
         } else{
-          localStorage.setItem("token", (res.data.token));
-          localStorage.setItem("session-data", JSON.stringify(res.data.data));
-          push('/')
+          if(input === 'Sign-up'){
+           alertSuccessSignUp()
+          } else if( input === 'Sign-in'){
+            redirectSignIn(res)
+          }
         }    
       });
   }
+
+  const redirectSignIn=(res:any)=>{
+    localStorage.setItem("token", (res.data.token));
+    localStorage.setItem("session-data", JSON.stringify(res.data.data));
+    push('/')
+  }
+
+  const alertSuccessSignUp=()=>{
+    toggleLoader('none');
+    callModal('Sign up success, please sign-in with new account to continue');
+  }
+
+
 
     const settingLoader=()=>{
       const loader:any=document.querySelector('#loader');
